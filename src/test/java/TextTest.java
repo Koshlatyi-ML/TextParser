@@ -16,7 +16,7 @@ public class TextTest {
                       "\"I hope you will be here,\" he said. " +
                       "Welcome to the Wells Fargo Inc. - first bank in the USA..oops!!??.." +
                       "Well, this is the end...";
-        Text.parseText(text);
+        Text.tryParseText(text);
     }
 
 }
