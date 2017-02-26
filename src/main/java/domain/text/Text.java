@@ -5,14 +5,12 @@ import util.RegularExpressions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Text {
     private List<Sentence> sentences;
-
-    private boolean hasValidated = false;
-    private boolean isValid;
 
     private static final Pattern SENTENCE_PATTERN
             = RegularExpressions.sentencePattern();
@@ -67,6 +65,31 @@ public class Text {
 
     public List<Sentence> getSentences() {
         return sentences;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Text)) return false;
+        Text text = (Text) o;
+
+        if(sentences.size() != text.getSentences().size()) {
+            return  false;
+        }
+
+        List<Sentence> argSentences = text.getSentences();
+        for (int i = 0; i < sentences.size(); i++) {
+            if (!sentences.get(i).equals(argSentences.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSentences());
     }
 
     @Override

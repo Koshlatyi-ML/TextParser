@@ -5,6 +5,7 @@ import domain.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
 public class TextTest {
@@ -37,10 +38,22 @@ public class TextTest {
                 "\"I hope you will be here,\" he said. " +
                 "Welcome to the Wells Fargo Inc. - first bank in the USA." +
                 "Well, this is the end...   \n";
-        Text.tryParse(text);
 
         List<Sentence> sentences = new ArrayList<>();
-        // todo fill sentences
+        sentences.add(Sentence.parse("I am the domain.text!!! "));
+        sentences.add(Sentence.parse("I has a lot of words!? \n"));
+        sentences.add(Sentence.parse("One more answer?!\t\t "));
+        sentences.add(Sentence.parse("Plain sentence (yes, it is). "));
+        sentences.add(Sentence.parse("Plain exclamation! "));
+        sentences.add(Sentence.parse("Plain question?"));
+        sentences.add(Sentence.parse("1. Statement four. "));
+        sentences.add(Sentence.parse("S.T.A.L.K.E.R. is the best game ever!!!"));
+        sentences.add(Sentence.parse("\"I hope you will be here,\" he said. "));
+        sentences.add(Sentence.parse("Welcome to the Wells Fargo Inc. - first bank in the USA."));
+        sentences.add(Sentence.parse("Well, this is the end...   \n"));
+        Text etalon = new Text(sentences);
+
+        assertEquals(etalon, Text.tryParse(text));
     }
 
 

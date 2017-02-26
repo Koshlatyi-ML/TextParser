@@ -4,10 +4,7 @@ import domain.lexeme.Lexeme;
 import domain.lexeme.LexemeParser;
 import util.RegularExpressions;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class Sentence {
@@ -82,6 +79,55 @@ public class Sentence {
 
     public List<Lexeme> getWhitespaceList() {
         return whitespaceList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Sentence)) return false;
+        Sentence sentence = (Sentence) o;
+
+        if(lexemeList.size() != sentence.getLexemeList().size()
+                || whitespaceList.size() != sentence.getWhitespaceList().size()
+                || wordList.size() != sentence.getWordList().size()
+                || markList.size() != sentence.getMarkList().size()) {
+            return  false;
+        }
+
+        List<Lexeme> allLexemes = sentence.getLexemeList();
+        for (int i = 0; i < allLexemes.size(); i++) {
+            if (!lexemeList.get(i).equals(allLexemes.get(i))) {
+                return false;
+            }
+        }
+
+        List<Lexeme> markLexemes = sentence.getMarkList();
+        for (int i = 0; i < allLexemes.size(); i++) {
+            if (!markList.get(i).equals(markLexemes.get(i))) {
+                return false;
+            }
+        }
+
+        List<Lexeme> whitespaceLexemes = sentence.getWhitespaceList();
+        for (int i = 0; i < allLexemes.size(); i++) {
+            if (!whitespaceList.get(i).equals(whitespaceLexemes.get(i))) {
+                return false;
+            }
+        }
+
+        List<Lexeme> wordLexemes = sentence.getWordList();
+        for (int i = 0; i < allLexemes.size(); i++) {
+            if (!wordList.get(i).equals(wordLexemes.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getLexemeList(), getWordList(), getMarkList(), getWhitespaceList());
     }
 
     @Override
