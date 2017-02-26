@@ -1,6 +1,6 @@
 package domain;
 
-import util.RegularExpressions;
+import service.util.RegularExpressions;
 
 import java.util.*;
 import java.util.regex.Matcher;

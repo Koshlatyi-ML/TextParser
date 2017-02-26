@@ -1,6 +1,6 @@
 package domain;
 
-import util.RegularExpressions;
+import service.util.RegularExpressions;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,29 +68,6 @@ public class Text {
 
     public List<Sentence> getSentences() {
         return sentences;
-    }
-
-    public void printWords() {
-        List<String> words =  sentences.stream()
-                .map(Sentence::getWordList)
-                .flatMap(Collection::stream)
-                .map(Token::toString)
-                .sorted(String::compareToIgnoreCase)
-                .collect(Collectors.toList());
-
-        final String ANSI_RESET = "\u001B[0m";
-        final String ANSI_RED = "\u001B[31m";
-
-
-
-        String letter = "";
-        for (String word : words) {
-            if (word.substring(0,1).compareToIgnoreCase(letter) > 0) {
-                letter = word.substring(0,1);
-                System.out.print(ANSI_RED);
-            }
-            System.out.println(word + ANSI_RESET);
-        }
     }
 
     @Override

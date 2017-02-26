@@ -13,20 +13,6 @@ import static junit.framework.TestCase.assertTrue;
 
 public class TextTest {
     @Test
-    public void printWords() throws Exception {
-        String text = "I am the domain.text!!! " +
-                "I has a lot of words!? \n" +
-                "One more answer?!\t\t " +
-                "Plain sentence (yes, it is). Plain exclamation! Plain question?" +
-                "1. Statement four. " +
-                "S.T.A.L.K.E.R. is the best game ever!!!" +
-                "\"I hope you will be here,\" he said. " +
-                "Welcome to the Wells Fargo Inc. - first bank in the USA. " +
-                "Well, this is the end...   \n";
-        Text.forceParse(text).printWords();
-    }
-
-    @Test
     public void hashCodeTest() throws Exception {
         String text = "I am the domain.text!!! " +
                 "I has a lot of words!? \n" +
