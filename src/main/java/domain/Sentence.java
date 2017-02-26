@@ -52,7 +52,7 @@ public class Sentence {
                     .findFirst().orElseThrow(IllegalArgumentException::new);
 
             tokenList.add(nextToken);
-            index += nextToken.getLexeme().length();
+            index += nextToken.getToken().length();
         }
 
         return new Sentence(tokenList, wordList, markList, whitespaceList);
