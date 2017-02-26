@@ -3,18 +3,14 @@ package domain;
 import java.util.Objects;
 
 public class Token {
-    private String token;
+    private String value;
 
-    public Token(String token) {
-        this.token = token;
+    Token(String value) {
+        this.value = value;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
+    public String getValue() {
+        return value;
     }
 
     @Override
@@ -22,16 +18,16 @@ public class Token {
         if (this == o) return true;
         if (!(o instanceof Token)) return false;
         Token token1 = (Token) o;
-        return Objects.equals(getToken(), token1.getToken());
+        return Objects.equals(getValue(), token1.getValue());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getToken());
+        return Objects.hash(getValue());
     }
 
     @Override
     public String toString() {
-        return token;
+        return value;
     }
 }

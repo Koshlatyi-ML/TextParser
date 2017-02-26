@@ -13,6 +13,8 @@ public class Sentence {
     private List<Token> markList;
     private List<Token> whitespaceList;
 
+    private static final TokenFactory tokenFactory = TokenFactory.getInstance();
+
     private Sentence(List<Token> tokenList, List<Token> wordList,
                      List<Token> markList, List<Token> whitespaceList) {
         this.tokenList = tokenList;
@@ -44,7 +46,7 @@ public class Sentence {
                         Matcher matcher = pattern.matcher(str);
                         matcher.find(currentIndex);
 
-                        Token newToken = new Token(matcher.group());
+                        Token newToken = tokenFactory.createToken(matcher.group());
                         patternStorageMap.get(pattern).add(newToken);
 
                         return newToken;
@@ -52,7 +54,7 @@ public class Sentence {
                     .findFirst().orElseThrow(IllegalArgumentException::new);
 
             tokenList.add(nextToken);
-            index += nextToken.getToken().length();
+            index += nextToken.getValue().length();
         }
 
         return new Sentence(tokenList, wordList, markList, whitespaceList);
