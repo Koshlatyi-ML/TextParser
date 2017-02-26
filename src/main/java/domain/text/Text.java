@@ -1,4 +1,7 @@
-import regex.RegularExpressions;
+package domain.text;
+
+import domain.Sentence;
+import util.RegularExpressions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +18,7 @@ public class Text {
             = RegularExpressions.sentencePattern();
     private static Matcher matcher;
 
-    private Text(List<Sentence> sentences) {
+    public Text(List<Sentence> sentences) {
         this.sentences = sentences;
     }
 
@@ -24,7 +27,7 @@ public class Text {
 
         matcher = SENTENCE_PATTERN.matcher(text);
         while (matcher.find()) {
-            sentences.add(Sentence.createSentence());
+            sentences.add(Sentence.parse(matcher.group()));
         }
 
         return new Text(sentences);
@@ -43,10 +46,11 @@ public class Text {
                 throw new IllegalArgumentException();
             }
 
-            previousEnd = currentStart;
+            previousEnd = matcher.end();
+            sentences.add(Sentence.parse(matcher.group()));
         }
 
-        if (matcher.end() != text.length()) {
+        if (previousEnd != text.length()) {
             throw new IllegalArgumentException();
         }
 
@@ -64,11 +68,12 @@ public class Text {
     public List<Sentence> getSentences() {
         return sentences;
     }
-//    private Text(List<Sentence> sentences) {
-//        this.sentences = sentences;
-//    }
-//
-//    public List<Sentence> getSentences() {
-//        return sentences;
-//    }
+
+    @Override
+    public String toString() {
+        String text = "";
+        return sentences.stream()
+                .map(Sentence::toString)
+                .reduce(text, (s, s2) -> s + s2);
+    }
 }

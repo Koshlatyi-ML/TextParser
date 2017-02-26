@@ -1,4 +1,6 @@
-import regex.RegularExpressions;
+package domain.text;
+
+import util.RegularExpressions;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
