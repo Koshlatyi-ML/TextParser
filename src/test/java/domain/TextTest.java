@@ -1,3 +1,5 @@
+package domain;
+
 import domain.Sentence;
 import org.junit.Test;
 import domain.Text;
@@ -6,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 public class TextTest {
@@ -24,6 +27,29 @@ public class TextTest {
 
         assertEquals(etalon.hashCode(), Text.tryParse(text).hashCode());
     }
+    @Test
+    public void equalsTrue() throws Exception {
+        String text = "I am the domain.text!!! " +
+                "I has a lot of words!? \n" +
+                "One more answer?!\t\t ";
+
+        assertTrue(Text.forceParse(text).equals(Text.forceParse(text)));
+    }
+    @Test
+    public void equalsFalse() throws Exception {
+        String text1 = "I am the domain.text!!! " +
+                "I has a lot of words!? \n" +
+                "One more answer?!\t\t ";
+
+        String text2 = "I am not the domain.text!!! " +
+                "I has a lot of words!? \n" +
+                "One more answer?!\t\t ";
+
+
+        assertFalse(Text.forceParse(text1).equals(Text.forceParse(text2)));
+    }
+
+
 
     @Test
     public void toStringTest() throws Exception {

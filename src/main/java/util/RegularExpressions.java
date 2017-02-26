@@ -1,5 +1,6 @@
 package util;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegularExpressions {
@@ -36,8 +37,15 @@ public class RegularExpressions {
         return Pattern.compile("\\s+");
     }
 
+    private static final String POST_HYPHEN_PART = "-(?=([a-zA-Z]+))([a-zA-Z])+";
+    private static final String POST_APOSTROPHE_PART = "'(?=([a-zA-Z]*))([a-zA-Z])*";
+
     public static Pattern wordPattern() {
-        return Pattern.compile("[a-zA-Z]+"); //TODO implement hyphen
+        final String wordRegex = "[a-zA-Z]+" +
+                "(" + POST_HYPHEN_PART +
+                     "|" + POST_APOSTROPHE_PART +
+                ")?";
+        return Pattern.compile(wordRegex);
     }
     public static Pattern markPattern() {
         return Pattern.compile("[^\\s+a-zA-Z]+");

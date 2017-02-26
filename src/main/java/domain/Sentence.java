@@ -7,28 +7,28 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Sentence {
-    private List<Lexeme> lexemeList;
+    private List<Token> tokenList;
 
-    private List<Lexeme> wordList;
-    private List<Lexeme> markList;
-    private List<Lexeme> whitespaceList;
+    private List<Token> wordList;
+    private List<Token> markList;
+    private List<Token> whitespaceList;
 
-    private Sentence(List<Lexeme> lexemeList, List<Lexeme> wordList,
-                    List<Lexeme> markList, List<Lexeme> whitespaceList) {
-        this.lexemeList = lexemeList;
+    private Sentence(List<Token> tokenList, List<Token> wordList,
+                     List<Token> markList, List<Token> whitespaceList) {
+        this.tokenList = tokenList;
         this.wordList = wordList;
         this.markList = markList;
         this.whitespaceList = whitespaceList;
     }
 
     public static Sentence parse(String str) {
-        List<Lexeme> lexemeList = new ArrayList<>();
+        List<Token> tokenList = new ArrayList<>();
 
-        List<Lexeme> wordList = new ArrayList<>();
-        List<Lexeme> markList = new ArrayList<>();
-        List<Lexeme> whitespaceList = new ArrayList<>();
+        List<Token> wordList = new ArrayList<>();
+        List<Token> markList = new ArrayList<>();
+        List<Token> whitespaceList = new ArrayList<>();
 
-        Map<Pattern, List<Lexeme>> patternStorageMap = new HashMap<>();
+        Map<Pattern, List<Token>> patternStorageMap = new HashMap<>();
         patternStorageMap.put(RegularExpressions.markPattern(), markList);
         patternStorageMap.put(RegularExpressions.wordPattern(), wordList);
         patternStorageMap.put(RegularExpressions.whitespacePattern(), whitespaceList);
@@ -38,39 +38,39 @@ public class Sentence {
             String input = "" + str.charAt(index);
 
             final int currentIndex = index;
-            Lexeme nextLexeme = patternStorageMap.keySet().stream()
+            Token nextToken = patternStorageMap.keySet().stream()
                     .filter(pattern -> input.matches(pattern.toString()))
                     .map(pattern -> {
                         Matcher matcher = pattern.matcher(str);
                         matcher.find(currentIndex);
 
-                        Lexeme newLexeme = new Lexeme(matcher.group());
-                        patternStorageMap.get(pattern).add(newLexeme);
+                        Token newToken = new Token(matcher.group());
+                        patternStorageMap.get(pattern).add(newToken);
 
-                        return newLexeme;
+                        return newToken;
                     })
                     .findFirst().orElseThrow(IllegalArgumentException::new);
 
-            lexemeList.add(nextLexeme);
-            index += nextLexeme.getLexeme().length();
+            tokenList.add(nextToken);
+            index += nextToken.getLexeme().length();
         }
 
-        return new Sentence(lexemeList, wordList, markList, whitespaceList);
+        return new Sentence(tokenList, wordList, markList, whitespaceList);
     }
 
-    public List<Lexeme> getLexemeList() {
-        return lexemeList;
+    public List<Token> getTokenList() {
+        return tokenList;
     }
 
-    public List<Lexeme> getWordList() {
+    public List<Token> getWordList() {
         return wordList;
     }
 
-    public List<Lexeme> getMarkList() {
+    public List<Token> getMarkList() {
         return markList;
     }
 
-    public List<Lexeme> getWhitespaceList() {
+    public List<Token> getWhitespaceList() {
         return whitespaceList;
     }
 
@@ -80,37 +80,37 @@ public class Sentence {
         if (!(o instanceof Sentence)) return false;
         Sentence sentence = (Sentence) o;
 
-        if(lexemeList.size() != sentence.getLexemeList().size()
+        if(tokenList.size() != sentence.getTokenList().size()
                 || whitespaceList.size() != sentence.getWhitespaceList().size()
                 || wordList.size() != sentence.getWordList().size()
                 || markList.size() != sentence.getMarkList().size()) {
             return  false;
         }
 
-        List<Lexeme> allLexemes = sentence.getLexemeList();
-        for (int i = 0; i < allLexemes.size(); i++) {
-            if (!lexemeList.get(i).equals(allLexemes.get(i))) {
+        List<Token> allTokens = sentence.getTokenList();
+        for (int i = 0; i < allTokens.size(); i++) {
+            if (!tokenList.get(i).equals(allTokens.get(i))) {
                 return false;
             }
         }
 
-        List<Lexeme> markLexemes = sentence.getMarkList();
-        for (int i = 0; i < markLexemes.size(); i++) {
-            if (!markList.get(i).equals(markLexemes.get(i))) {
+        List<Token> markTokens = sentence.getMarkList();
+        for (int i = 0; i < markTokens.size(); i++) {
+            if (!markList.get(i).equals(markTokens.get(i))) {
                 return false;
             }
         }
 
-        List<Lexeme> whitespaceLexemes = sentence.getWhitespaceList();
-        for (int i = 0; i < whitespaceLexemes.size(); i++) {
-            if (!whitespaceList.get(i).equals(whitespaceLexemes.get(i))) {
+        List<Token> whitespaceTokens = sentence.getWhitespaceList();
+        for (int i = 0; i < whitespaceTokens.size(); i++) {
+            if (!whitespaceList.get(i).equals(whitespaceTokens.get(i))) {
                 return false;
             }
         }
 
-        List<Lexeme> wordLexemes = sentence.getWordList();
-        for (int i = 0; i < wordLexemes.size(); i++) {
-            if (!wordList.get(i).equals(wordLexemes.get(i))) {
+        List<Token> wordTokens = sentence.getWordList();
+        for (int i = 0; i < wordTokens.size(); i++) {
+            if (!wordList.get(i).equals(wordTokens.get(i))) {
                 return false;
             }
         }
@@ -120,14 +120,14 @@ public class Sentence {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getLexemeList(), getWordList(), getMarkList(), getWhitespaceList());
+        return Objects.hash(getTokenList(), getWordList(), getMarkList(), getWhitespaceList());
     }
 
     @Override
     public String toString() {
         String sentence = "";
-        return lexemeList.stream()
-                .map(Lexeme::toString)
+        return tokenList.stream()
+                .map(Token::toString)
                 .reduce(sentence, (s, s2) -> s + s2);
     }
 }

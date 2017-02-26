@@ -2,10 +2,10 @@ package domain;
 
 import java.util.Objects;
 
-public class Lexeme {
+public class Token {
     private String lexeme;
 
-    public Lexeme(String lexeme) {
+    public Token(String lexeme) {
         this.lexeme = lexeme;
     }
 
@@ -20,9 +20,9 @@ public class Lexeme {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Lexeme)) return false;
-        Lexeme lexeme1 = (Lexeme) o;
-        return Objects.equals(getLexeme(), lexeme1.getLexeme());
+        if (!(o instanceof Token)) return false;
+        Token token1 = (Token) o;
+        return Objects.equals(getLexeme(), token1.getLexeme());
     }
 
     @Override
