@@ -1,10 +1,9 @@
 package domain;
 
-import domain.lexeme.Lexeme;
-import domain.lexeme.LexemeParser;
 import util.RegularExpressions;
 
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Sentence {
@@ -29,40 +28,34 @@ public class Sentence {
         List<Lexeme> markList = new ArrayList<>();
         List<Lexeme> whitespaceList = new ArrayList<>();
 
-        Map<Pattern, LexemeParser> patternParserMap = new HashMap<>();
-        initMap(patternParserMap, wordList, markList, whitespaceList);
-
+        Map<Pattern, List<Lexeme>> patternStorageMap = new HashMap<>();
+        patternStorageMap.put(RegularExpressions.markPattern(), markList);
+        patternStorageMap.put(RegularExpressions.wordPattern(), wordList);
+        patternStorageMap.put(RegularExpressions.whitespacePattern(), whitespaceList);
 
         int index = 0;
         while (index < str.length()) {
             String input = "" + str.charAt(index);
 
             final int currentIndex = index;
-            Lexeme nextLexeme = patternParserMap.keySet().stream()
+            Lexeme nextLexeme = patternStorageMap.keySet().stream()
                     .filter(pattern -> input.matches(pattern.toString()))
-                    .map(pattern -> patternParserMap.get(pattern)
-                                    .parseAndStore(str, currentIndex))
-                    .findFirst()
-                    .orElseThrow(IllegalArgumentException::new);
+                    .map(pattern -> {
+                        Matcher matcher = pattern.matcher(str);
+                        matcher.find(currentIndex);
+
+                        Lexeme newLexeme = new Lexeme(matcher.group());
+                        patternStorageMap.get(pattern).add(newLexeme);
+
+                        return newLexeme;
+                    })
+                    .findFirst().orElseThrow(IllegalArgumentException::new);
 
             lexemeList.add(nextLexeme);
             index += nextLexeme.getLexeme().length();
         }
 
         return new Sentence(lexemeList, wordList, markList, whitespaceList);
-    }
-
-    private static void initMap(Map<Pattern, LexemeParser> patternParserMap,
-                             List<Lexeme> wordList, List<Lexeme> markList,
-                             List<Lexeme> whitespaceList) {
-
-        Pattern markPattern = RegularExpressions.markPattern();
-        Pattern wordPattern = RegularExpressions.wordPattern();
-        Pattern whitespacePattern = RegularExpressions.whitespacePattern();
-
-        patternParserMap.put(markPattern, new LexemeParser(markList, markPattern));
-        patternParserMap.put(wordPattern, new LexemeParser(wordList, wordPattern));
-        patternParserMap.put(whitespacePattern, new LexemeParser(whitespaceList, whitespacePattern));
     }
 
     public List<Lexeme> getLexemeList() {
@@ -102,21 +95,21 @@ public class Sentence {
         }
 
         List<Lexeme> markLexemes = sentence.getMarkList();
-        for (int i = 0; i < allLexemes.size(); i++) {
+        for (int i = 0; i < markLexemes.size(); i++) {
             if (!markList.get(i).equals(markLexemes.get(i))) {
                 return false;
             }
         }
 
         List<Lexeme> whitespaceLexemes = sentence.getWhitespaceList();
-        for (int i = 0; i < allLexemes.size(); i++) {
+        for (int i = 0; i < whitespaceLexemes.size(); i++) {
             if (!whitespaceList.get(i).equals(whitespaceLexemes.get(i))) {
                 return false;
             }
         }
 
         List<Lexeme> wordLexemes = sentence.getWordList();
-        for (int i = 0; i < allLexemes.size(); i++) {
+        for (int i = 0; i < wordLexemes.size(); i++) {
             if (!wordList.get(i).equals(wordLexemes.get(i))) {
                 return false;
             }

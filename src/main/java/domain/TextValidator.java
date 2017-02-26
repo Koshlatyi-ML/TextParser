@@ -1,4 +1,4 @@
-package domain.text;
+package domain;
 
 import util.RegularExpressions;
 

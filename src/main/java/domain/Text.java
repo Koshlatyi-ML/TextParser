@@ -1,6 +1,5 @@
-package domain.text;
+package domain;
 
-import domain.Sentence;
 import util.RegularExpressions;
 
 import java.util.ArrayList;
@@ -23,9 +22,11 @@ public class Text {
     public static Text forceParse(String text) {
         List<Sentence> sentences = new ArrayList<>();
 
-        matcher = SENTENCE_PATTERN.matcher(text);
-        while (matcher.find()) {
-            sentences.add(Sentence.parse(matcher.group()));
+        if (text != null) {
+            matcher = SENTENCE_PATTERN.matcher(text);
+            while (matcher.find()) {
+                sentences.add(Sentence.parse(matcher.group()));
+            }
         }
 
         return new Text(sentences);
@@ -55,8 +56,8 @@ public class Text {
         return new Text(sentences);
     }
 
-    public void appendSentences(List<Sentence> sentences) {
-        this.sentences.addAll(sentences);
+    public void appendSentence(Sentence sentence) {
+        this.sentences.add(sentence);
     }
 
     public void setSentences(List<Sentence> sentences) {
